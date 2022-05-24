@@ -9,21 +9,52 @@
   The purpose of this analysis is to evaluate the best outcomes for future campaigns. By evaluating the timing of release, if there are months during the year that are significantly more successful or significantly less successful, more or fewer campaigns can be initiated during those times of year. Similarly, the goal set to raise in each campaign gives insight as to ranges that may be ideal. By looking at the percentages of successful compared to those that were canceled or failed, it can be determined which goal ranges will yield the best or worst results, to either pursue or avoid, respectively.
 
 ---
-
 ## Analysis and Challenges
 ### Analysis of Outcomes Based on Launch Date
-  In analyzing the parent category of Theater events, which includes plays, television, music, documentaries, games, and other subcategories, the pattern of successful, failed, and canceled events were evaluated by the month of launch of the campaign. As can be seen in Figure 1, *Theater Oucomes Based on Launch Date"*, the months of January, February, March, April, August, September, and October had between 54 and 72 successful campaigns. The only month that had a significantly lower number of successful campaigns was December. December was the only month in the dataset that had nearly as many failed campaigns as successful campaigns. During May, June, and July the number of successful campaigns were 111, 100, and 87, respectively, while the number of failed campaigns remained between 31 and 52 throughtout the entire year. The number of canceled events was highest in January, with only 7 canceled. The rest of the year yielded 4 or fewer each month. 
+  In analyzing the parent category of Theater events, which includes plays, television, music, documentaries, games, and other subcategories, the pattern of successful, failed, and canceled events were evaluated by the month of launch of the campaign. To sort the campaigns by year in a Pivot table, the YEAR() function was applied to the Date Created Conversion, which read the raw data for the launched_at column: 
+  
+ Drawing from Column J, "launched_at", which was represented as "1447174261", I applied the function
+ ```
+ =((J522/3600)/24)+DATE(1970, 1, 1)
+ ```
+  to convert this to a date in MM/DD/YYYY format. This was followed by the creation of another "Year" column, to which the forumula
+  ```
+  =YEAR(S522)
+  ```
+  was applied. From here, I created a pivot table filtering *Years, Parent Category*, and *Subcategory*, setting *outcomes* as the columns, *Date Created Conversion* to rows, and *Count of outcomes* as the values. This was made into a line graph, looking at the month of campaign and count of outcomes.  
+  
+![Theater_Outcomes_Pivot Table](https://user-images.githubusercontent.com/33167541/170137386-5728c02f-d7a2-47ea-92ac-9329b4c6780c.png)
+  
+  As can be seen in Figure 1, *Theater Oucomes Based on Launch Date"*, the months of January, February, March, April, August, September, and October had between 54 and 72 successful campaigns. The only month that had a significantly lower number of successful campaigns was December. December was the only month in the dataset that had nearly as many failed campaigns as successful campaigns. During May, June, and July the number of successful campaigns were 111, 100, and 87, respectively, while the number of failed campaigns remained between 31 and 52 throughtout the entire year. The number of canceled events was highest in January, with only 7 canceled. The rest of the year yielded 4 or fewer each month. 
 
-![Theater_Outcomes_Based_vs_Launch](https://user-images.githubusercontent.com/33167541/170132911-98d4be4f-8315-4364-b461-c87f73ae017c.png)
+![Theater_Outcomes_Based_vs_Launch](https://user-images.githubusercontent.com/33167541/170137427-93f8e69f-3e4a-484a-a4eb-db0cc0375aba.png)
+
   Based on these data, the best time of year to initiate campaigns is clearly starting in May and through the summer months. Launching a campaign in December should be avoided, as the number of successful cmapaigns drops below the number of failed and canceled campaigns, something that did not happen in any other month. 
   
   Because the following analysis only focuses on plays, a filter was added to the Theater Outcomes Based on Launch Date graph and is shown in Figure 2, *"Play Outcomes Based on Launch Date"*. There were no canceled events within the plays, but the pattern remains the same as with overall theater outcomes with the subtle difference that there were actually more failed theater events in December than successful events. 
 
-![Play_Outcomes_Based_vs_Launch](https://user-images.githubusercontent.com/33167541/170132943-f8feec0a-1b20-41e2-aa04-a900879d432a.png)
+![Play_Outcomes_Based_vs_Launch](https://user-images.githubusercontent.com/33167541/170137452-4233a548-3f97-483a-97ec-d0a8a8d2eb75.png)
+
 ### Analaysis of Outcomes Based on Goals
+  To analyze the outcomes based on goals, the range of goals were separated into bins starting with campaigns under $1000, and then from $5000 onward in bins of $5000 up to $50,000. The goal, outcome, and subcategory were filtered to match the goal's bin, the correct outcome, and to ensure the data is only representing plays. 
+  
+ For the number of successful outcomes from $10,000 to $14,999, the code used was
+ ```
+ =COUNTIFS(Goal, ">= 10000", Goal, "<15000", Outcomes, "successful", Subcategory, "plays")
+ ```
+ Where "Goal" represents the column from the Kickstarted Sheet Goal column, "Outcomes" represents the outcomes column, and "Subcategory" represents the subcategory column. To calculate the total number of projects, 
+ ``` 
+ =SUM(B5:D5)
+ ``` 
+ was used in this column. To acquire the percentage of each outcome, the number of that outcome was divided by the total, 
+ ```
+ =B6/E6
+ ```
+ and then formatted as *Percentage*, from the Number representation table. 
+  
   There were a broad range of goals set for each kickstarter campaign, from less than $1000 to greater than $50000, and it is not surprising that some of the ranges yielded more successes than failures as well as the converse. In Figure 3, *"Outcomes Based on Goal"*, the first thing of note is that there were no canceled play campaigns, so the line representing cancelations is simply zero throughout, which makes it much easier to interpret the successes versus unsuccessful campaigns. Up to the campaign goals of $15,000, there was a higher percentage of successful campaigns than failed campaigns, but this was declining as the dollar amount increased. From $20,000 to $30,000 the percentage of failed was substantially higher than that of the successful campaigns. Somewhere between $30,000 and $45,000, there was a drastic change, with a high percentage of successful campaigns, and then above $45,000 almost all of the campaigns failed. 
   
-  ![Outcomes_vs_Goals](https://user-images.githubusercontent.com/33167541/170132968-8cf9a4b3-1017-4166-8919-94b9f6561263.png)
+![Outcomes_vs_Goals](https://user-images.githubusercontent.com/33167541/170137473-63c9eb73-7bd2-4845-9a85-747933f13932.png)
   While this graphic representation suggests that there is a "sweet spot" somewhere between $30k and $45k, the representation can be misleading, because this represents only 9 projects total. Even more misleading is that 100% of campaigns at $45k failed, but this is true only because there was only 1 campaign with that goal compared to the 16 above $50k - still suggesting that the campaigns higher than $45k should be avoided.
   
 ### Challenges and Difficulties Encountered  
@@ -34,7 +65,7 @@
 ---
 
 ## Results
-- With regard to the start date, we can conclude that there is a much higher chance of launching successful campaigns between May and June, though there were still more successes than failures or cancelations during the other months of the year with the exception of December. December is the only month that should be completely avoided in launching a campaign as there were more unsuccessful campaigns than successful during that month.  
+- With regard to the start date, we can conclude that there is a much higher chance of launching successful campaigns between May and June, though there were still more successes than failures or cancelations during the other months of the year with the exception of December. The second conclusion made from this analysis was that December is the only month that should be completely avoided in launching a campaign as there were more unsuccessful campaigns than successful during that month.  
 
 - Regarding the outcomes based on set goals, there are a lot of data supporting that campaigns under $15000 had a higher percentage of successful events. Additionally, there was a range between $30k and $45k that did yield more successes than failures. Some of the most extreme points on the graph are artifically inflated due to a lack of data points, which is seen in several of the bins greater than $15k, since these represent fewer than 10% of all campaigns launched. Some of this can be remedied by expanding the bins from $5,000 ranges to $10,000 from $20k onward, though that has issues of its own.  By increasing the number of smaller campaigns, there is a higher chance that the goals will be met, however the data aound $35k-$40k should not be ignored and further explored.
 
