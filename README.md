@@ -1,5 +1,5 @@
-# Kickstarter Analysis using Excel 
-by Justin R. Papreck
+# Kickstarter Analysis using Excel  
+#### by Justin R. Papreck
 ---
 
 ## Overview
